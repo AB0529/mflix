@@ -1,0 +1,14 @@
+.notFoundText {
+    color: #fff;
+    font-size: 80px;
+}
+
+.notFoundBox {
+    margin-top: 40vh;
+}
+
+.notFoundLine {
+    background-color: red;
+    height: 15px !important;
+    border: none;
+}

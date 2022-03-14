@@ -1,0 +1,22 @@
+.adminButtons {
+    padding: 10px;
+    margin: 10px;
+    width: 500px;
+}
+
+.addForm {
+    margin: 25px;
+    font-size: 50px;
+    font-size: 20px;
+} 
+
+.popoverTitle {
+    color: white;
+    font-size: 25px;
+    text-align: center;
+    background-color: #212529 !important;
+}
+
+.popOverBody {
+    background-color: #252b30;
+}
