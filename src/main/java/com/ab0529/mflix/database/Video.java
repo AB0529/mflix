@@ -29,12 +29,18 @@ public class Video {
     // - Comments
 
     public boolean areValuesNull() {
-        if (ID == null)
+        if (ID == null) {
+            System.out.println("id");
             return true;
-        if (imageURL == null)
+        }
+        if (imageURL == null) {
+            System.out.println("url");
             return true;
-        if (title == null)
+        }
+        if (title == null) {
+            System.out.println("title");
             return true;
+        }
 
         return description == null;
     }

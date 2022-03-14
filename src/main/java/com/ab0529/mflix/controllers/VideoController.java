@@ -35,6 +35,32 @@ public class VideoController {
         return new ApiResponse(HttpStatus.CREATED, "video created and saved", v);
     }
 
+    @PostMapping("/update/{id}")
+    public ApiResponse updateVideo(@PathVariable String id, @RequestBody Video v) {
+        // Try to find video
+        Optional<Video> vid = videoRepository.findByID(id);
+
+        System.out.println(id);
+
+        if (vid.isEmpty()) {
+            return new ApiResponse(HttpStatus.NOT_FOUND, "video not found", null);
+        }
+
+        // Make sure nothing is null
+        if (vid.get().areValuesNull()) {
+            return new ApiResponse(HttpStatus.BAD_REQUEST, "empty value detected", null);
+        }
+
+        // Update video
+        vid.get().setDescription(v.getDescription());
+        vid.get().setImageURL(v.getImageURL());
+        vid.get().setTitle(v.getTitle());
+
+        videoRepository.save(vid.get());
+
+        return new ApiResponse(HttpStatus.OK, "video has been updated", vid.get());
+    }
+
     @Transactional
     @DeleteMapping("/delete/{id}")
     public ApiResponse deleteVideo(@PathVariable String id) {
@@ -47,21 +73,16 @@ public class VideoController {
         return new ApiResponse(HttpStatus.OK, "video deleted", v);
     }
 
-    @GetMapping("/search")
-    public ApiResponse searchVideo(@RequestParam Optional<String> id, @RequestParam Optional<String> title) {
-        Optional<Video> v = Optional.empty();
+    @GetMapping("/search/{query}")
+    public ApiResponse searchVideo(@PathVariable String query) {
+        Iterable<Video> v = videoRepository.findPartialMatch(query);
+        int size = (int) StreamSupport.stream(v.spliterator(), false).count();
 
-        if (id.isPresent()) {
-            v = videoRepository.findByID(id.get());
-        } else if (title.isPresent()) {
-            v = videoRepository.findByTitle(title.get());
-        }
-
-        if (v.isEmpty()) {
+        if (size <= 0) {
             return new ApiResponse(HttpStatus.NOT_FOUND, "video not found", null);
         }
 
-        return new ApiResponse(HttpStatus.FOUND, "video found", v);
+        return new ApiResponse(HttpStatus.FOUND, "videos found", v);
     }
 
     @GetMapping("/all")

@@ -1,8 +1,39 @@
 plugins {
+	id "com.moowork.node" version "1.3.1"
 	id 'org.springframework.boot' version '2.6.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
+
+// Read more about how to configure the plugin from
+// https://github.com/srs/gradle-node-plugin/blob/master/docs/node.md
+node {
+	download = true
+
+	// Set the work directory for unpacking node
+	workDir = file("${project.buildDir}/nodejs")
+
+	// Set the work directory for NPM
+	npmWorkDir = file("${project.buildDir}/npm")
+}
+
+task appNpmInstall(type: NpmTask) {
+	description = "Installs all dependencies from package.json"
+	workingDir = file("${project.projectDir}/src/main/js/mflix")
+	args = ["install"]
+}
+
+task appNpmBuild(type: NpmTask) {
+	description = "Builds production version of the webapp"
+	workingDir = file("${project.projectDir}/src/main/js/mflix")
+	args = ["run", "build"]
+}
+
+task copyWebApp(type: Copy) {
+	from 'src/main/js/mflix/build'
+	into 'build/resources/main/static/.'
+}
+
 
 group = 'com.ab0529'
 version = '0.0.1-SNAPSHOT'

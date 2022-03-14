@@ -13,4 +13,6 @@ public interface VideoRepository extends CrudRepository<Video, Integer> {
     Optional<Video> deleteByID(String id);
     Optional<Video> findByTitle(@Param("title") String title);
     Optional<Video> findByID(String id);
+    @Query(value = "SELECT * FROM videos WHERE title OR description LIKE CONCAT('%', :inp, '%') OR ID LIKE CONCAT('%', :inp, '%')", nativeQuery = true)
+    Iterable<Video> findPartialMatch(@Param("inp") String input);
 }
